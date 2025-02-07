@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School CRM - Sign Up</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50">
+    <div class="min-h-screen flex items-center justify-center p-4">
+        <div class="w-full max-w-md bg-white rounded-lg shadow-sm p-8">
+            <div class="text-center mb-8">
+                <h1 class="text-2xl font-bold text-blue-600 mb-2">School CRM</h1>
+                <p class="text-gray-600">Create your account</p>
+            </div>
+
+            <form class="space-y-6" method="POST" action="{% url 'signup' %}">
+                {% csrf_token %}
+
+                <!-- Username -->
+                <div class="space-y-2">
+                    <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="bi bi-person text-gray-400"></i>
+                        </div>
+                        <input type="text" id="username" name="username" placeholder="Your username" required
+                            class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    {% if form.username.errors %}
+                        <p class="text-red-500 text-sm">{{ form.username.errors.0 }}</p>
+                    {% endif %}
+                </div>
+
+                <!-- Email -->
+                <div class="space-y-2">
+                    <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="bi bi-envelope text-gray-400"></i>
+                        </div>
+                        <input type="email" id="email" name="email" placeholder="name@school.com" required
+                            class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    {% if form.email.errors %}
+                        <p class="text-red-500 text-sm">{{ form.email.errors.0 }}</p>
+                    {% endif %}
+                </div>
+
+                <!-- Password -->
+                <div class="space-y-2">
+                    <label for="password1" class="block text-sm font-medium text-gray-700">Password</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="bi bi-lock text-gray-400"></i>
+                        </div>
+                        <input type="password" id="password1" name="password1" required
+                            class="block w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    {% if form.password1.errors %}
+                        <p class="text-red-500 text-sm">{{ form.password1.errors.0 }}</p>
+                    {% endif %}
+                </div>
+
+                <!-- Confirm Password -->
+                <div class="space-y-2">
+                    <label for="password2" class="block text-sm font-medium text-gray-700">Confirm Password</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="bi bi-lock text-gray-400"></i>
+                        </div>
+                        <input type="password" id="password2" name="password2" required
+                            class="block w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    {% if form.password2.errors %}
+                        <p class="text-red-500 text-sm">{{ form.password2.errors.0 }}</p>
+                    {% endif %}
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                    Sign up
+                </button>
+
+                <div class="text-center">
+                    <a href="{% url 'login' %}" class="text-blue-600 hover:text-blue-800">
+                        Already have an account? Sign in
+                    </a>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</body>
+</html>
