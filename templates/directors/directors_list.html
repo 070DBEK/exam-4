@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block title %}School CRM - Directors List{% endblock %}
+
+{% block content %}
+<div class="mb-8 flex justify-between items-center">
+    <h1 class="text-2xl font-bold">Directors</h1>
+    <a href="{% url 'directors:create' %}" class="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg">
+        <i class="bi bi-plus"></i>
+        <span>Add Director</span>
+    </a>
+</div>
+
+<!-- Directors Table -->
+<div class="bg-white rounded-lg shadow-sm">
+    <div class="overflow-x-auto">
+        <table class="w-full">
+            <thead class="bg-gray-50 border-b">
+                <tr>
+                    <th class="px-6 py-3 text-left text-sm font-medium text-gray-500">#</th>
+                    <th class="px-6 py-3 text-left text-sm font-medium text-gray-500">Director</th>
+                    <th class="px-6 py-3 text-left text-sm font-medium text-gray-500">Birth</th>
+                    <th class="px-6 py-3 text-left text-sm font-medium text-gray-500">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y">
+                {% for director in directors %}
+                <tr class="hover:bg-gray-50">
+                    <td class="px-6 py-4">{{ forloop.counter }}</td>
+                    <td class="px-6 py-4">
+                        <div class="flex items-center space-x-3">
+                            {% if director.picture %}
+                                <img src="{{ director.picture.url }}" alt="Director" class="w-10 h-10 rounded-full border">
+                            {% else %}
+                                <div class="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center">
+                                    <i class="bi bi-person text-gray-500"></i>
+                                </div>
+                            {% endif %}
+                            <div>
+                                <p class="font-medium">{{ director.first_name }} {{ director.last_name }}</p>
+                                <p class="text-sm text-gray-500">Director</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 text-sm">{{ director.birth }}</td>
+                    <td class="px-6 py-4">
+                        <div class="flex items-center space-x-3">
+                            <a href="{% url 'directors:detail' director.pk %}" class="text-blue-600 hover:text-blue-800">
+                                <i class="bi bi-eye"></i>
+                            </a>
+                            <a href="{% url 'directors:update' director.pk %}" class="text-gray-600 hover:text-gray-800">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                            <a href="{% url 'directors:delete' director.pk %}" class="text-red-600 hover:text-red-800">
+                                <i class="bi bi-trash"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="px-6 py-4 text-center text-gray-500">No directors found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

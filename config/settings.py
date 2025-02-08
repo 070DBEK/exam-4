@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'groups',
     'subjects',
     'students',
+    'teachers',
+    'directors',
     'departments',
 ]
 
@@ -110,11 +112,14 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTH_USER_MODEL = "accounts.CustomUser"  # your_app ni haqiqiy app nomi bilan almashtiring
 
-# Authentication backend
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
 ]
+
+LOGIN_REDIRECT_URL = "dashboard"
+LOGOUT_REDIRECT_URL = "accounts:logout_success"
 
 
 # Internationalization
@@ -139,9 +144,3 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
-
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-AUTH_USER_MODEL = 'accounts.CustomUser'
-
-LOGIN_REDIRECT_URL = 'dashboard'
-LOGOUT_REDIRECT_URL = "accounts:logout_success"

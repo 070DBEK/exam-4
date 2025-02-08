@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block title %}School CRM - Director Detail{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <!-- Header -->
+    <div class="mb-8 flex items-center justify-between">
+        <div class="flex items-center space-x-4">
+            <div class="p-3 bg-indigo-50 rounded-lg">
+                <i class="bi bi-person-badge text-2xl text-indigo-600"></i>
+            </div>
+            <div>
+                <h1 class="text-2xl font-bold">{{ director.last_name }} {{ director.first_name }}</h1>
+                <p class="text-gray-500">Director ID: DIR-{{ director.id }}</p>
+            </div>
+        </div>
+        <div class="flex items-center space-x-4">
+            <a href="{% url 'directors:update' director.id %}" class="px-4 py-2 border rounded-lg hover:bg-gray-50">
+                <i class="bi bi-pencil"></i>
+                <span class="ml-2">Edit</span>
+            </a>
+            <form method="post" action="{% url 'directors:delete' director.id %}" class="inline">
+                {% csrf_token %}
+                <button type="submit" class="px-4 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100">
+                    <i class="bi bi-trash"></i>
+                    <span class="ml-2">Delete</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Director Info -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+        <!-- Basic Info -->
+        <div class="lg:col-span-2 bg-white rounded-lg shadow-sm p-6">
+            <h2 class="text-lg font-semibold mb-4">Director Information</h2>
+            <div class="space-y-4">
+                {% if director.picture %}
+                <div class="flex justify-center">
+                    <img src="{{ director.picture.url }}" alt="Director Image" class="w-32 h-32 rounded-full shadow-md">
+                </div>
+                {% endif %}
+                <div>
+                    <label class="block text-sm text-gray-500">Full Name</label>
+                    <p class="text-gray-900">{{ director.last_name }} {{ director.first_name }}</p>
+                </div>
+                <div>
+                    <label class="block text-sm text-gray-500">Birth Date</label>
+                    <p class="text-gray-900">{{ director.birth }}</p>
+                </div>
+                <div>
+                    <label class="block text-sm text-gray-500">Bio</label>
+                    <p class="text-gray-900">{{ director.bio }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="space-y-6">
+            <div class="bg-white rounded-lg shadow-sm p-6">
+                <h3 class="text-lg font-semibold mb-4">Director Stats</h3>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm text-gray-500">Departments Managed</label>
+                        <p class="text-2xl font-bold">{{ director.department_set.count }}</p>
+                    </div>
+                    <div>
+                        <label class="block text-sm text-gray-500">Years of Experience</label>
+                        <p class="text-2xl font-bold">10+</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Back Button -->
+    <div class="text-center">
+        <a href="{% url 'directors:list' %}" class="text-blue-600 hover:underline">
+            <i class="bi bi-arrow-left"></i> Back to List
+        </a>
+    </div>
+</div>
+{% endblock %}

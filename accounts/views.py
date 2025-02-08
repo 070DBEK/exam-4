@@ -23,6 +23,10 @@ class SignUpView(CreateView):
         login(self.request, user)
         return super().form_valid(form)
 
+    def form_invalid(self, form):
+        return self.render_to_response(self.get_context_data(form=form))
+
+
 
 class UserLoginView(FormView):
     form_class = CustomAuthenticationForm
@@ -32,11 +36,14 @@ class UserLoginView(FormView):
     def form_valid(self, form):
         email = form.cleaned_data.get('email')
         password = form.cleaned_data.get('password')
-        user = authenticate(email=email, password=password)
+        user = authenticate(self.request, email=email, password=password)
+
         if user is not None:
             login(self.request, user)
             return super().form_valid(form)
-        return self.form_invalid(form)
+        else:
+            return self.form_invalid(form)
+
 
 
 class ProfileView(LoginRequiredMixin, UpdateView):

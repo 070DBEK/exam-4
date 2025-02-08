@@ -18,52 +18,82 @@
             <form class="space-y-6" method="POST" action="{% url 'accounts:signup' %}">
                 {% csrf_token %}
 
+                {% if form.errors %}
+                    <div class="bg-red-100 text-red-700 p-3 rounded-md">
+                        {% for error in form.non_field_errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
                 <!-- Username -->
                 <div class="space-y-2">
-                    <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
+                    <label for="{{ form.username.id_for_label }}" class="block text-sm font-medium text-gray-700">Username</label>
                     <div class="relative">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                             <i class="bi bi-person text-gray-400"></i>
                         </div>
-                        <input type="text" id="username" name="username" placeholder="Your username" required
-                            class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        {{ form.username }}
                     </div>
+                    {% if form.username.errors %}
+                        <p class="text-red-500 text-sm">{{ form.username.errors.0 }}</p>
+                    {% endif %}
                 </div>
 
                 <!-- Email -->
                 <div class="space-y-2">
-                    <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                    <label for="{{ form.email.id_for_label }}" class="block text-sm font-medium text-gray-700">Email</label>
                     <div class="relative">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                             <i class="bi bi-envelope text-gray-400"></i>
                         </div>
-                        <input type="email" id="email" name="email" placeholder="name@school.com" required
-                            class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        {{ form.email }}
                     </div>
+                    {% if form.email.errors %}
+                        <p class="text-red-500 text-sm">{{ form.email.errors.0 }}</p>
+                    {% endif %}
+                </div>
+
+                <!-- Phone Number -->
+                <div class="space-y-2">
+                    <label for="{{ form.phone_number.id_for_label }}" class="block text-sm font-medium text-gray-700">Phone Number</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="bi bi-telephone text-gray-400"></i>
+                        </div>
+                        {{ form.phone_number }}
+                    </div>
+                    {% if form.phone_number.errors %}
+                        <p class="text-red-500 text-sm">{{ form.phone_number.errors.0 }}</p>
+                    {% endif %}
                 </div>
 
                 <!-- Password -->
                 <div class="space-y-2">
-                    <label for="password1" class="block text-sm font-medium text-gray-700">Password</label>
+                    <label for="{{ form.password1.id_for_label }}" class="block text-sm font-medium text-gray-700">Password</label>
                     <div class="relative">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                             <i class="bi bi-lock text-gray-400"></i>
                         </div>
-                        <input type="password" id="password1" name="password1" required
-                            class="block w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        {{ form.password1 }}
                     </div>
+                    {% if form.password1.errors %}
+                        <p class="text-red-500 text-sm">{{ form.password1.errors.0 }}</p>
+                    {% endif %}
                 </div>
 
                 <!-- Confirm Password -->
                 <div class="space-y-2">
-                    <label for="password2" class="block text-sm font-medium text-gray-700">Confirm Password</label>
+                    <label for="{{ form.password2.id_for_label }}" class="block text-sm font-medium text-gray-700">Confirm Password</label>
                     <div class="relative">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                             <i class="bi bi-lock text-gray-400"></i>
                         </div>
-                        <input type="password" id="password2" name="password2" required
-                            class="block w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        {{ form.password2 }}
                     </div>
+                    {% if form.password2.errors %}
+                        <p class="text-red-500 text-sm">{{ form.password2.errors.0 }}</p>
+                    {% endif %}
                 </div>
 
                 <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
@@ -76,7 +106,6 @@
                     </a>
                 </div>
             </form>
-
         </div>
     </div>
 </body>

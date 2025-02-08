@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}Confirm Delete - {{ director.first_name }} {{ director.last_name }}{% endblock %}
+
+{% block content %}
+<div class="max-w-lg mx-auto bg-white p-6 rounded-lg shadow-md">
+    <!-- Header -->
+    <div class="flex items-center space-x-4 mb-4">
+        <div class="p-3 bg-red-50 rounded-lg">
+            <i class="bi bi-exclamation-triangle text-2xl text-red-600"></i>
+        </div>
+        <div>
+            <h1 class="text-xl font-bold text-red-600">Confirm Deletion</h1>
+            <p class="text-gray-600">
+                Are you sure you want to delete 
+                <strong>{{ director.first_name }} {{ director.last_name }}</strong>? 
+                This action cannot be undone.
+            </p>
+        </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="mt-6 flex justify-end space-x-4">
+        <a href="{% url 'directors:list' %}" class="px-4 py-2 border rounded-lg hover:bg-gray-100">
+            Cancel
+        </a>
+
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">
+                Yes, Delete
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}

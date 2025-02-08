@@ -1,188 +1,79 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>School CRM - Students List</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
-</head>
-<body class="bg-gray-50">
-    <div class="flex h-screen overflow-hidden">
-        <!-- Sidebar -->
-        <aside class="fixed left-0 top-0 h-screen w-64 bg-white border-r p-4 overflow-y-auto">
-            <div class="mb-8">
-                <h1 class="text-xl font-bold text-blue-600">School CRM</h1>
-            </div>
-            <nav class="space-y-2">
-                <a href="../dashboard.html" class="flex items-center space-x-2 px-4 py-2 rounded-lg hover:bg-gray-50">
-                    <i class="bi bi-grid"></i>
-                    <span>Dashboard</span>
-                </a>
-                <a href="../departments/list.html" class="flex items-center space-x-2 px-4 py-2 rounded-lg hover:bg-gray-50">
-                    <i class="bi bi-building"></i>
-                    <span>Departments</span>
-                </a>
-                <a href="list.html" class="flex items-center space-x-2 px-4 py-2 rounded-lg bg-blue-50 text-blue-600">
-                    <i class="bi bi-people"></i>
-                    <span>Students</span>
-                </a>
-                <a href="../teachers/list.html" class="flex items-center space-x-2 px-4 py-2 rounded-lg hover:bg-gray-50">
-                    <i class="bi bi-person-badge"></i>
-                    <span>Teachers</span>
-                </a>
-                <a href="../groups/list.html" class="flex items-center space-x-2 px-4 py-2 rounded-lg hover:bg-gray-50">
-                    <i class="bi bi-collection"></i>
-                    <span>Groups</span>
-                </a>
-                <a href="../subjects/list.html" class="flex items-center space-x-2 px-4 py-2 rounded-lg hover:bg-gray-50">
-                    <i class="bi bi-book"></i>
-                    <span>Subjects</span>
-                </a>
-            </nav>
-        </aside>
+{% extends 'base.html' %}
 
-        <!-- Main Content -->
-        <div class="flex-1 ml-64 flex flex-col h-screen">
-            <!-- Navbar -->
-            <nav class="bg-white shadow-sm">
-                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div class="flex justify-between h-16">
-                        <div class="flex items-center">
-                            <h1 class="text-xl font-bold text-blue-600">School CRM</h1>
-                        </div>
-                        <div class="flex items-center">
-                            <a href="/profile-update.html" class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">
-                                <i class="bi bi-person-circle mr-2"></i>Update Profile
-                            </a>
-                            <a href="/logout.html" class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">
-                                <i class="bi bi-box-arrow-right mr-2"></i>Logout
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </nav>
+{% block title %}School CRM - Students List{% endblock %}
 
-            <!-- Main Content -->
-            <main class="flex-1 overflow-y-auto p-8">
-                <div class="mb-8 flex justify-between items-center">
-                    <h1 class="text-2xl font-bold">Students</h1>
-                    <div class="flex items-center space-x-4">
-                        <div class="relative">
-                            <input type="search" placeholder="Search students..." class="pl-10 pr-4 py-2 border rounded-lg">
-                            <i class="bi bi-search absolute left-3 top-3 text-gray-400"></i>
-                        </div>
-                        <a href="form.html" class="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg">
-                            <i class="bi bi-plus"></i>
-                            <span>Add Student</span>
-                        </a>
-                    </div>
-                </div>
+{% block content %}
+<div class="mb-8 flex justify-between items-center">
+    <h1 class="text-2xl font-bold">Students</h1>
+    <div class="flex items-center space-x-4">
+        <div class="relative">
+            <input type="search" placeholder="Search students..." class="pl-10 pr-4 py-2 border rounded-lg">
+            <i class="bi bi-search absolute left-3 top-3 text-gray-400"></i>
+        </div>
+        <a href="{% url 'students:create' %}" class="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg">
+            <i class="bi bi-plus"></i>
+            <span>Add Student</span>
+        </a>
+    </div>
+</div>
 
-                <!-- Filters -->
-                <div class="bg-white p-4 rounded-lg shadow-sm mb-6">
-                    <div class="flex flex-wrap gap-4">
-                        <select class="border rounded-lg px-4 py-2">
-                            <option>All Groups</option>
-                            <option>Group A</option>
-                            <option>Group B</option>
-                            <option>Group C</option>
-                        </select>
-                        <select class="border rounded-lg px-4 py-2">
-                            <option>All Grades</option>
-                            <option>Grade 9</option>
-                            <option>Grade 10</option>
-                            <option>Grade 11</option>
-                        </select>
-                        <select class="border rounded-lg px-4 py-2">
-                            <option>Status</option>
-                            <option>Active</option>
-                            <option>Inactive</option>
-                        </select>
-                        <button class="px-4 py-2 text-blue-600 hover:bg-blue-50 rounded-lg">
-                            Clear Filters
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Students Table -->
-                <div class="bg-white rounded-lg shadow-sm">
-                    <div class="overflow-x-auto">
-                        <table class="w-full">
-                            <thead class="bg-gray-50 border-b">
-                                <tr>
-                                    <th class="px-6 py-3 text-left text-sm font-medium text-gray-500">
-                                        <div class="flex items-center space-x-1">
-                                            <span>Name</span>
-                                            <i class="bi bi-arrow-down-up"></i>
-                                        </div>
-                                    </th>
-                                    <th class="px-6 py-3 text-left text-sm font-medium text-gray-500">
-                                        <div class="flex items-center space-x-1">
-                                            <span>ID</span>
-                                            <i class="bi bi-arrow-down-up"></i>
-                                        </div>
-                                    </th>
-                                    <th class="px-6 py-3 text-left text-sm font-medium text-gray-500">Group</th>
-                                    <th class="px-6 py-3 text-left text-sm font-medium text-gray-500">Grade</th>
-                                    <th class="px-6 py-3 text-left text-sm font-medium text-gray-500">Status</th>
-                                    <th class="px-6 py-3 text-left text-sm font-medium text-gray-500">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y">
-                                <tr class="hover:bg-gray-50">
-                                    <td class="px-6 py-4">
-                                        <div class="flex items-center space-x-3">
-                                            <img src="https://placekitten.com/32/32" class="rounded-full w-8 h-8">
-                                            <div>
-                                                <p class="font-medium">John Doe</p>
-                                                <p class="text-sm text-gray-500">john@example.com</p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="px-6 py-4 text-sm">STU001</td>
-                                    <td class="px-6 py-4 text-sm">Group A</td>
-                                    <td class="px-6 py-4 text-sm">Grade 10</td>
-                                    <td class="px-6 py-4">
-                                        <span class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-sm">
-                                            Active
-                                        </span>
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        <div class="flex items-center space-x-3">
-                                            <a href="detail.html" class="text-blue-600 hover:text-blue-800">
-                                                <i class="bi bi-eye"></i>
-                                            </a>
-                                            <a href="form.html" class="text-gray-600 hover:text-gray-800">
-                                                <i class="bi bi-pencil"></i>
-                                            </a>
-                                            <button class="text-red-600 hover:text-red-800">
-                                                <i class="bi bi-trash"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <!-- More student rows... -->
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <!-- Pagination -->
-                    <div class="px-6 py-4 border-t">
-                        <div class="flex justify-between items-center">
-                            <p class="text-sm text-gray-600">Showing 1 to 10 of 100 students</p>
-                            <div class="flex space-x-2">
-                                <button class="px-3 py-1 border rounded hover:bg-gray-50">Previous</button>
-                                <button class="px-3 py-1 border rounded bg-blue-600 text-white">1</button>
-                                <button class="px-3 py-1 border rounded hover:bg-gray-50">2</button>
-                                <button class="px-3 py-1 border rounded hover:bg-gray-50">3</button>
-                                <button class="px-3 py-1 border rounded hover:bg-gray-50">Next</button>
+<!-- Students Table -->
+<div class="bg-white rounded-lg shadow-sm">
+    <div class="overflow-x-auto">
+        <table class="w-full">
+            <thead class="bg-gray-50 border-b">
+                <tr>
+                    <th class="px-6 py-3 text-left text-sm font-medium text-gray-500">Name</th>
+                    <th class="px-6 py-3 text-left text-sm font-medium text-gray-500">ID</th>
+                    <th class="px-6 py-3 text-left text-sm font-medium text-gray-500">Group</th>
+                    <th class="px-6 py-3 text-left text-sm font-medium text-gray-500">Grade</th>
+                    <th class="px-6 py-3 text-left text-sm font-medium text-gray-500">Status</th>
+                    <th class="px-6 py-3 text-left text-sm font-medium text-gray-500">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y">
+                {% for student in students %}
+                <tr class="hover:bg-gray-50">
+                    <td class="px-6 py-4">
+                        <div class="flex items-center space-x-3">
+                            <img src="{{ student.profile_picture.url }}" class="rounded-full w-8 h-8">
+                            <div>
+                                <p class="font-medium">{{ student.first_name }} {{ student.last_name }}</p>
+                                <p class="text-sm text-gray-500">{{ student.email }}</p>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </main>
-        </div>
+                    </td>
+                    <td class="px-6 py-4 text-sm">{{ student.id }}</td>
+                    <td class="px-6 py-4 text-sm">{{ student.group.name }}</td>
+                    <td class="px-6 py-4 text-sm">{{ student.grade_level }}</td>
+                    <td class="px-6 py-4">
+                        {% if student.is_active %}
+                            <span class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-sm">Active</span>
+                        {% else %}
+                            <span class="px-2 py-1 bg-red-100 text-red-800 rounded-full text-sm">Inactive</span>
+                        {% endif %}
+                    </td>
+                    <td class="px-6 py-4">
+                        <div class="flex items-center space-x-3">
+                            <a href="{% url 'students:detail' student.pk %}" class="text-blue-600 hover:text-blue-800">
+                                <i class="bi bi-eye"></i>
+                            </a>
+                            <a href="{% url 'students:update' student.pk %}" class="text-gray-600 hover:text-gray-800">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                            <a href="{% url 'students:delete' student.pk %}" class="text-red-600 hover:text-red-800">
+                                <i class="bi bi-trash"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="text-center py-4 text-gray-500">No students found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
-</body>
-</html>
+</div>
+{% endblock %}
