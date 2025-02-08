@@ -15,7 +15,7 @@
                 <p class="text-gray-600">Create your account</p>
             </div>
 
-            <form class="space-y-6" method="POST" action="{% url 'signup' %}">
+            <form class="space-y-6" method="POST" action="{% url 'accounts:signup' %}">
                 {% csrf_token %}
 
                 <!-- Username -->
@@ -28,9 +28,6 @@
                         <input type="text" id="username" name="username" placeholder="Your username" required
                             class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                     </div>
-                    {% if form.username.errors %}
-                        <p class="text-red-500 text-sm">{{ form.username.errors.0 }}</p>
-                    {% endif %}
                 </div>
 
                 <!-- Email -->
@@ -43,9 +40,6 @@
                         <input type="email" id="email" name="email" placeholder="name@school.com" required
                             class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                     </div>
-                    {% if form.email.errors %}
-                        <p class="text-red-500 text-sm">{{ form.email.errors.0 }}</p>
-                    {% endif %}
                 </div>
 
                 <!-- Password -->
@@ -58,9 +52,6 @@
                         <input type="password" id="password1" name="password1" required
                             class="block w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                     </div>
-                    {% if form.password1.errors %}
-                        <p class="text-red-500 text-sm">{{ form.password1.errors.0 }}</p>
-                    {% endif %}
                 </div>
 
                 <!-- Confirm Password -->
@@ -73,18 +64,14 @@
                         <input type="password" id="password2" name="password2" required
                             class="block w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                     </div>
-                    {% if form.password2.errors %}
-                        <p class="text-red-500 text-sm">{{ form.password2.errors.0 }}</p>
-                    {% endif %}
                 </div>
 
-                <!-- Submit Button -->
                 <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                     Sign up
                 </button>
 
                 <div class="text-center">
-                    <a href="{% url 'login' %}" class="text-blue-600 hover:text-blue-800">
+                    <a href="{% url 'accounts:login' %}" class="text-blue-600 hover:text-blue-800">
                         Already have an account? Sign in
                     </a>
                 </div>
