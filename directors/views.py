@@ -1,17 +1,31 @@
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import Director
+from django.db.models import Q
 from .forms import DirectorForm
 
 
 class DirectorListView(ListView):
     model = Director
-    template_name = 'directors/directors_list.html'
-    context_object_name = 'directors'
+    template_name = "directors/directors_list.html"
+    context_object_name = "directors"
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        search_query = self.request.GET.get("q")
+
+        if search_query:
+            queryset = queryset.filter(
+                Q(first_name__icontains=search_query) |
+                Q(last_name__icontains=search_query) |
+                Q(bio__icontains=search_query)
+            )
+        return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["title"] = "Directors"
+        context["search_query"] = self.request.GET.get("q", "")
         return context
 
 

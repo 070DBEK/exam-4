@@ -58,51 +58,41 @@ class CustomAuthenticationForm(forms.Form):
 
 
 class UserProfileForm(forms.ModelForm):
-    """
-    Form for updating the user's profile.
-    """
-
+    username = forms.CharField(disabled=True, required=False)
+    email = forms.EmailField(disabled=True, required=False)
     new_password = forms.CharField(
+        widget=forms.PasswordInput(attrs={"class": "w-full px-3 py-2 border rounded-md"}),
         required=False,
-        widget=forms.PasswordInput(attrs={'class': 'w-full px-3 py-2 border rounded-md'}),
         label="New Password"
     )
-    repeat_password = forms.CharField(
+    confirm_password = forms.CharField(
+        widget=forms.PasswordInput(attrs={"class": "w-full px-3 py-2 border rounded-md"}),
         required=False,
-        widget=forms.PasswordInput(attrs={'class': 'w-full px-3 py-2 border rounded-md'}),
-        label="Repeat Password"
+        label="Confirm Password"
     )
 
     class Meta:
         model = UserProfile
-        fields = ('bio', 'birth_date')
+        fields = ['username', 'email', 'bio', 'birth_date', 'phone_number', 'new_password', 'confirm_password']
+        widgets = {
+            "bio": forms.Textarea(attrs={"class": "w-full px-3 py-2 border rounded-md"}),
+            "birth_date": forms.DateInput(attrs={"type": "date", "class": "w-full px-3 py-2 border rounded-md"}),
+            "phone_number": forms.TextInput(attrs={"class": "w-full px-3 py-2 border rounded-md"}),
+        }
 
     def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
         super().__init__(*args, **kwargs)
-        for field in self.fields.values():
-            field.widget.attrs.update({
-                'class': 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50'
-            })
+        if user:
+            self.fields['username'].initial = user.username
+            self.fields['email'].initial = user.email
 
     def clean(self):
         cleaned_data = super().clean()
         new_password = cleaned_data.get("new_password")
-        repeat_password = cleaned_data.get("repeat_password")
+        confirm_password = cleaned_data.get("confirm_password")
 
-        if new_password and new_password != repeat_password:
-            self.add_error("repeat_password", "Passwords do not match.")
+        if new_password and new_password != confirm_password:
+            self.add_error("confirm_password", "Passwords do not match.")
 
         return cleaned_data
-
-    def save(self, commit=True):
-        user_profile = super().save(commit=False)
-
-        # Update password if provided
-        new_password = self.cleaned_data.get("new_password")
-        if new_password:
-            user_profile.user.set_password(new_password)
-            user_profile.user.save()
-
-        if commit:
-            user_profile.save()
-        return user_profile

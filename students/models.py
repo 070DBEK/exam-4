@@ -23,7 +23,7 @@ class Student(models.Model):
     phone_number = models.CharField(max_length=15)
     address = models.TextField()
     group = models.ForeignKey(Group, on_delete=models.SET_NULL, null=True, blank=True)
-    grade = models.CharField(max_length=2, choices=GRADE_CHOICES)  # ChoiceField qo'shildi
+    grade = models.CharField(max_length=2, choices=GRADE_CHOICES)
     parent_name = models.CharField(max_length=100)
     parent_phone = models.CharField(max_length=15)
     parent_email = models.EmailField()

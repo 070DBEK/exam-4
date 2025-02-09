@@ -2,6 +2,7 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import Department
 from .forms import DepartmentForm
+from django.db.models import Q
 
 
 class DepartmentListView(ListView):
@@ -9,9 +10,21 @@ class DepartmentListView(ListView):
     template_name = 'departments/list.html'
     context_object_name = 'departments'
 
+    def get_queryset(self):
+        queryset = Department.objects.all()
+        search_query = self.request.GET.get('q')
+
+        if search_query:
+            queryset = queryset.filter(
+                Q(name__icontains=search_query) | Q(description__icontains=search_query)
+            )
+
+        return queryset
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["title"] = "Departments"
+        context["search_query"] = self.request.GET.get("q", "")
         return context
 
 

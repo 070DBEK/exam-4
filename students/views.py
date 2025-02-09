@@ -1,7 +1,8 @@
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from students.models import Student
 from students.forms import StudentForm
+from django.db.models import Q
+from .models import Student
 
 
 class StudentListView(ListView):
@@ -9,10 +10,25 @@ class StudentListView(ListView):
     template_name = "students/list.html"
     context_object_name = "students"
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        search_query = self.request.GET.get("q")
+
+        if search_query:
+            queryset = queryset.filter(
+                Q(first_name__icontains=search_query) |
+                Q(last_name__icontains=search_query) |
+                Q(email__icontains=search_query) |
+                Q(phone_number__icontains=search_query)
+            )
+        return queryset
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["title"] = "Students"
+        context["search_query"] = self.request.GET.get("q", "")
         return context
+
 
 
 class StudentDetailView(DetailView):

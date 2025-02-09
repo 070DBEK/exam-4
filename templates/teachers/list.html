@@ -7,10 +7,13 @@
 <div class="mb-8 flex justify-between items-center">
     <h1 class="text-2xl font-bold">Teachers</h1>
     <div class="flex items-center space-x-4">
-        <div class="relative">
-            <input type="search" placeholder="Search teachers..." class="pl-10 pr-4 py-2 border rounded-lg">
-            <i class="bi bi-search absolute left-3 top-3 text-gray-400"></i>
-        </div>
+        <form method="GET" action="{% url 'teachers:list' %}" class="relative">
+            <input type="search" name="q" placeholder="Search teachers..."
+                   value="{{ search_query }}" class="pl-10 pr-4 py-2 border rounded-lg">
+            <button type="submit" class="absolute right-3 top-2 text-gray-400">
+                <i class="bi bi-search"></i>
+            </button>
+        </form>
         <a href="{% url 'teachers:create' %}" class="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg">
             <i class="bi bi-plus"></i>
             <span>Add Teacher</span>
@@ -18,39 +21,40 @@
     </div>
 </div>
 
-<!-- Filters -->
-<form method="GET" class="flex flex-wrap gap-4">
-    <select name="department" class="border rounded-lg px-4 py-2">
-        <option value="All">All Departments</option>
-        {% for department in departments %}
-            <option value="{{ department.name }}" {% if request.GET.department == department.name %}selected{% endif %}>
-                {{ department.name }}
-            </option>
-        {% endfor %}
-    </select>
 
-    <select name="subject" class="border rounded-lg px-4 py-2">
-        <option value="All">All Subjects</option>
-        {% for subject in subjects %}
-            <option value="{{ subject.name }}" {% if request.GET.subject == subject.name %}selected{% endif %}>
-                {{ subject.name }}
-            </option>
-        {% endfor %}
-    </select>
+<!--&lt;!&ndash; Filters &ndash;&gt;-->
+<!--<form method="GET" class="flex flex-wrap gap-4">-->
+<!--    <select name="department" class="border rounded-lg px-4 py-2">-->
+<!--        <option value="All">All Departments</option>-->
+<!--        {% for department in departments %}-->
+<!--            <option value="{{ department.name }}" {% if request.GET.department == department.name %}selected{% endif %}>-->
+<!--                {{ department.name }}-->
+<!--            </option>-->
+<!--        {% endfor %}-->
+<!--    </select>-->
 
-    <select name="status" class="border rounded-lg px-4 py-2">
-        <option value="Status">Status</option>
-        <option value="Active" {% if request.GET.status == "Active" %}selected{% endif %}>Active</option>
-        <option value="On Leave" {% if request.GET.status == "On Leave" %}selected{% endif %}>On Leave</option>
-    </select>
+<!--    <select name="subject" class="border rounded-lg px-4 py-2">-->
+<!--        <option value="All">All Subjects</option>-->
+<!--        {% for subject in subjects %}-->
+<!--            <option value="{{ subject.name }}" {% if request.GET.subject == subject.name %}selected{% endif %}>-->
+<!--                {{ subject.name }}-->
+<!--            </option>-->
+<!--        {% endfor %}-->
+<!--    </select>-->
 
-    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg">
-        Apply Filters
-    </button>
-    <a href="{% url 'teachers:list' %}" class="px-4 py-2 text-blue-600 hover:bg-blue-50 rounded-lg">
-        Clear Filters
-    </a>
-</form>
+<!--    <select name="status" class="border rounded-lg px-4 py-2">-->
+<!--        <option value="Status">Status</option>-->
+<!--        <option value="Active" {% if request.GET.status == "Active" %}selected{% endif %}>Active</option>-->
+<!--        <option value="On Leave" {% if request.GET.status == "On Leave" %}selected{% endif %}>On Leave</option>-->
+<!--    </select>-->
+
+<!--    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg">-->
+<!--        Apply Filters-->
+<!--    </button>-->
+<!--    <a href="{% url 'teachers:list' %}" class="px-4 py-2 text-blue-600 hover:bg-blue-50 rounded-lg">-->
+<!--        Clear Filters-->
+<!--    </a>-->
+<!--</form>-->
 
 
 <!-- Teachers Table -->

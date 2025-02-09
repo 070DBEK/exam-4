@@ -5,18 +5,83 @@
 {% block content %}
 
 <div class="mb-8 flex justify-between items-center">
-<h1 class="text-2xl font-bold">Departments</h1>
-<div class="flex items-center space-x-4">
-    <div class="relative">
-        <input type="search" placeholder="Search departments..." class="pl-10 pr-4 py-2 border rounded-lg">
-        <i class="bi bi-search absolute left-3 top-3 text-gray-400"></i>
+    <h1 class="text-2xl font-bold">Departments</h1>
+    <div class="flex items-center space-x-4">
+        <form method="GET" action="{% url 'departments:list' %}" class="relative">
+            <input type="search" name="q" placeholder="Search departments..."
+                   value="{{ search_query }}" class="pl-10 pr-4 py-2 border rounded-lg">
+            <button type="submit" class="absolute right-3 top-2 text-gray-400">
+                <i class="bi bi-search"></i>
+            </button>
+        </form>
+        <a href="{% url 'departments:create' %}" class="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg">
+            <i class="bi bi-plus"></i>
+            <span>Add Department</span>
+        </a>
     </div>
-    <a href="{% url 'departments:create' %}" class="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg">
-        <i class="bi bi-plus"></i>
-        <span>Add Department</span>
-    </a>
 </div>
-</div>
+
+
+<!--<div class="mb-8 flex justify-between items-center">-->
+<!--    <h1 class="text-2xl font-bold">Groups</h1>-->
+<!--    <div class="flex items-center space-x-4">-->
+<!--        <form method="GET" class="relative">-->
+<!--            <input type="search" name="q" placeholder="Search groups..."-->
+<!--                   class="pl-10 pr-4 py-2 border rounded-lg"-->
+<!--                   value="{{ request.GET.q }}">-->
+<!--            <i class="bi bi-search absolute left-3 top-3 text-gray-400"></i>-->
+<!--        </form>-->
+<!--        <a href="{% url 'groups:create' %}" class="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg">-->
+<!--            <i class="bi bi-plus"></i>-->
+<!--            <span>Add Group</span>-->
+<!--        </a>-->
+<!--    </div>-->
+<!--</div>-->
+
+<!--&lt;!&ndash; Filters &ndash;&gt;-->
+<!--<div class="bg-white p-4 rounded-lg shadow-sm mb-6">-->
+<!--    <form method="GET" class="flex flex-wrap gap-4">-->
+<!--        &lt;!&ndash; Grade Level Filter &ndash;&gt;-->
+<!--        <select name="grade" class="border rounded-lg px-4 py-2">-->
+<!--            <option value="">All Grades</option>-->
+<!--            {% for grade in grade_choices %}-->
+<!--                <option value="{{ grade.0 }}" {% if request.GET.grade == grade.0|stringformat:"s" %}selected{% endif %}>-->
+<!--                    {{ grade.1 }}-->
+<!--                </option>-->
+<!--            {% endfor %}-->
+<!--        </select>-->
+
+<!--        &lt;!&ndash; Schedule Filter &ndash;&gt;-->
+<!--        <select name="schedule" class="border rounded-lg px-4 py-2">-->
+<!--            <option value="">All Schedules</option>-->
+<!--            {% for schedule in schedule_choices %}-->
+<!--                <option value="{{ schedule.0 }}" {% if request.GET.schedule == schedule.0 %}selected{% endif %}>-->
+<!--                    {{ schedule.1 }}-->
+<!--                </option>-->
+<!--            {% endfor %}-->
+<!--        </select>-->
+
+<!--        &lt;!&ndash; Teacher Filter &ndash;&gt;-->
+<!--        <select name="teacher" class="border rounded-lg px-4 py-2">-->
+<!--            <option value="">All Teachers</option>-->
+<!--            {% for teacher in teachers %}-->
+<!--                <option value="{{ teacher.id }}" {% if request.GET.teacher == teacher.id|stringformat:"s" %}selected{% endif %}>-->
+<!--                    {{ teacher.first_name }} {{ teacher.last_name }}-->
+<!--                </option>-->
+<!--            {% endfor %}-->
+<!--        </select>-->
+
+<!--        &lt;!&ndash; Apply Filters Button &ndash;&gt;-->
+<!--        <button type="submit" class="px-4 py-2 text-blue-600 hover:bg-blue-50 rounded-lg">-->
+<!--            Apply Filters-->
+<!--        </button>-->
+
+<!--        &lt;!&ndash; Clear Filters &ndash;&gt;-->
+<!--        <a href="{% url 'groups:list' %}" class="px-4 py-2 text-gray-600 hover:bg-gray-50 rounded-lg">-->
+<!--            Clear Filters-->
+<!--        </a>-->
+<!--    </form>-->
+<!--</div>-->
 
 <!-- Departments Table -->
 <div class="bg-white rounded-lg shadow-sm">

@@ -4,6 +4,7 @@ from .models import Teacher
 from subjects.models import Subject
 from departments.models import Department
 from .forms import TeacherForm
+from django.db.models import Q
 
 
 class TeacherListView(ListView):
@@ -17,6 +18,13 @@ class TeacherListView(ListView):
         department = self.request.GET.get('department')
         subject = self.request.GET.get('subject')
         status = self.request.GET.get('status')
+        search_query = self.request.GET.get('q')
+
+        # Qidiruv so'rovi ishlashi uchun filter qo'shish
+        if search_query:
+            queryset = queryset.filter(
+                Q(first_name__icontains=search_query) | Q(last_name__icontains=search_query)
+            )
 
         if department and department != "All":
             queryset = queryset.filter(department__name=department)
@@ -37,6 +45,7 @@ class TeacherListView(ListView):
         context['departments'] = Department.objects.all()
         context['subjects'] = Subject.objects.all()
         context["title"] = "Teachers"
+        context['search_query'] = self.request.GET.get('q', '')  # Qidiruv so'zini kontekstga qo'shish
         return context
 
 

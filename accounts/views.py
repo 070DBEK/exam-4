@@ -61,23 +61,35 @@ class UserLoginView(FormView):
 
 class ProfileView(LoginRequiredMixin, UpdateView):
     form_class = UserProfileForm
-    template_name = 'accounts/profile.html'
+    template_name = 'accounts/profile-update.html'
     success_url = reverse_lazy('accounts:profile')
 
     def get_object(self, queryset=None):
         return self.request.user.profile
 
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["user"] = self.request.user
+        return kwargs
+
     def form_valid(self, form):
         user_profile = form.save(commit=False)
+        user = self.request.user
         new_password = form.cleaned_data.get("new_password")
 
         if new_password:
-            self.request.user.set_password(new_password)
-            self.request.user.save()
-            update_session_auth_hash(self.request, self.request.user)
+            user.set_password(new_password)
+            user.save()
+            update_session_auth_hash(self.request, user)
 
         user_profile.save()
         return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = "Update Profile"
+        return context
+
 
 
 class LogoutView(LoginRequiredMixin, View):

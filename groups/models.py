@@ -25,7 +25,7 @@ class Group(models.Model):
     max_students = models.PositiveIntegerField()
     description = models.TextField(blank=True, null=True)
     subjects = models.ManyToManyField(Subject, related_name='groups')
-    students = models.ManyToManyField("students.Student", related_name="groups", blank=True)  # "students.Student" qilib yozildi
+    students = models.ManyToManyField("students.Student", related_name="groups", blank=True)
 
     def get_absolute_url(self):
         return reverse("groups:detail", kwargs={"pk": self.pk})
