@@ -13,11 +13,28 @@ class SubjectListView(ListView):
     template_name = "subjects/list.html"
     context_object_name = "subjects"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = "Directors"
+        return context
+
 
 class SubjectDetailView(DetailView):
     model = Subject
     template_name = "subjects/detail.html"
     context_object_name = "subject"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        subject = self.get_object()
+        context['total_groups'] = subject.groups.count()
+        context["total_students"] = sum(group.students.count() for group in subject.groups.all())
+        grades = [
+            float(student.grade) for group in subject.groups.all()
+            for student in group.students.all() if student.grade is not None
+        ]
+        context['average_grade'] = round(sum(grades) / len(grades), 2) if grades else "N/A"
+        return context
 
 
 class SubjectDeleteView(DeleteView):

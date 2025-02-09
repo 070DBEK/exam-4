@@ -9,20 +9,29 @@ class GroupListView(ListView):
     template_name = "groups/list.html"
     context_object_name = "groups"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = "Groups"
+        return context
+
+
 class GroupDetailView(DetailView):
     model = Group
     template_name = "groups/detail.html"
     context_object_name = "group"
+
 
 class GroupCreateView(CreateView):
     model = Group
     form_class = GroupForm
     template_name = "groups/form.html"
 
+
 class GroupUpdateView(UpdateView):
     model = Group
     form_class = GroupForm
     template_name = "groups/form.html"
+
 
 class GroupDeleteView(DeleteView):
     model = Group

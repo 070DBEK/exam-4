@@ -112,14 +112,26 @@
     <!-- Pagination -->
     <div class="px-6 py-4 border-t">
         <div class="flex justify-between items-center">
-            <p class="text-sm text-gray-600">Showing {{ groups.start_index }} to {{ groups.end_index }} of {{ groups.paginator.count }} groups</p>
+            <p class="text-sm text-gray-600">
+                Showing {{ page_obj.start_index }} to {{ page_obj.end_index }} of {{ page_obj.paginator.count }} subjects
+            </p>
             <div class="flex space-x-2">
-                {% if groups.has_previous %}
-                    <a href="?page={{ groups.previous_page_number }}" class="px-3 py-1 border rounded hover:bg-gray-50">Previous</a>
+                {% if page_obj.has_previous %}
+                    <a href="?page={{ page_obj.previous_page_number }}" class="px-3 py-1 border rounded hover:bg-gray-50">
+                        Previous
+                    </a>
                 {% endif %}
-                <span class="px-3 py-1 border rounded bg-blue-600 text-white">{{ groups.number }}</span>
-                {% if groups.has_next %}
-                    <a href="?page={{ groups.next_page_number }}" class="px-3 py-1 border rounded hover:bg-gray-50">Next</a>
+
+                {% for num in page_obj.paginator.page_range %}
+                    <a href="?page={{ num }}" class="px-3 py-1 border rounded {% if num == page_obj.number %}bg-blue-600 text-white{% else %}hover:bg-gray-50{% endif %}">
+                        {{ num }}
+                    </a>
+                {% endfor %}
+
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}" class="px-3 py-1 border rounded hover:bg-gray-50">
+                        Next
+                    </a>
                 {% endif %}
             </div>
         </div>

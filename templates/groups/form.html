@@ -49,6 +49,12 @@
                 {{ form.subjects }}
             </div>
         </div>
+        <div class="mb-6">
+            <label class="block text-sm font-medium text-gray-700 mb-2">Students</label>
+            <div class="space-y-2">
+                {{ form.students }}
+            </div>
+        </div>
         <div class="flex justify-end space-x-4">
             <a href="{% url 'groups:list' %}" class="px-4 py-2 border rounded-md hover:bg-gray-50">Cancel</a>
             <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">Save Group</button>

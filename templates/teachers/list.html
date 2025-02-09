@@ -19,30 +19,39 @@
 </div>
 
 <!-- Filters -->
-<div class="bg-white p-4 rounded-lg shadow-sm mb-6">
-    <div class="flex flex-wrap gap-4">
-        <select class="border rounded-lg px-4 py-2">
-            <option>All Departments</option>
-            <option>Science</option>
-            <option>Mathematics</option>
-            <option>Languages</option>
-        </select>
-        <select class="border rounded-lg px-4 py-2">
-            <option>All Subjects</option>
-            <option>Physics</option>
-            <option>Chemistry</option>
-            <option>Biology</option>
-        </select>
-        <select class="border rounded-lg px-4 py-2">
-            <option>Status</option>
-            <option>Active</option>
-            <option>On Leave</option>
-        </select>
-        <button class="px-4 py-2 text-blue-600 hover:bg-blue-50 rounded-lg">
-            Clear Filters
-        </button>
-    </div>
-</div>
+<form method="GET" class="flex flex-wrap gap-4">
+    <select name="department" class="border rounded-lg px-4 py-2">
+        <option value="All">All Departments</option>
+        {% for department in departments %}
+            <option value="{{ department.name }}" {% if request.GET.department == department.name %}selected{% endif %}>
+                {{ department.name }}
+            </option>
+        {% endfor %}
+    </select>
+
+    <select name="subject" class="border rounded-lg px-4 py-2">
+        <option value="All">All Subjects</option>
+        {% for subject in subjects %}
+            <option value="{{ subject.name }}" {% if request.GET.subject == subject.name %}selected{% endif %}>
+                {{ subject.name }}
+            </option>
+        {% endfor %}
+    </select>
+
+    <select name="status" class="border rounded-lg px-4 py-2">
+        <option value="Status">Status</option>
+        <option value="Active" {% if request.GET.status == "Active" %}selected{% endif %}>Active</option>
+        <option value="On Leave" {% if request.GET.status == "On Leave" %}selected{% endif %}>On Leave</option>
+    </select>
+
+    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg">
+        Apply Filters
+    </button>
+    <a href="{% url 'teachers:list' %}" class="px-4 py-2 text-blue-600 hover:bg-blue-50 rounded-lg">
+        Clear Filters
+    </a>
+</form>
+
 
 <!-- Teachers Table -->
 <div class="bg-white rounded-lg shadow-sm">

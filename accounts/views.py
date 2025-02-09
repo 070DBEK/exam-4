@@ -6,11 +6,24 @@ from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, FormView, UpdateView, TemplateView, View
 from .forms import CustomUserCreationForm, CustomAuthenticationForm, UserProfileForm
+from django.shortcuts import render
+from students.models import Student
+from teachers.models import Teacher
+from groups.models import Group
+from subjects.models import Subject
 
 
 class DashboardView(LoginRequiredMixin, TemplateView):
     template_name = 'dashboard.html'
     login_url = reverse_lazy('accounts:login')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['total_students'] = Student.objects.count()
+        context['total_teachers'] = Teacher.objects.count()
+        context['total_groups'] = Group.objects.count()
+        context['total_subjects'] = Subject.objects.count()
+        return context
 
 
 class SignUpView(CreateView):

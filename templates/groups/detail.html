@@ -50,6 +50,24 @@
                 </div>
             </div>
         </div>
+
+        <!-- Students Section -->
+        <div class="bg-white rounded-lg shadow-sm p-6">
+            <h2 class="text-lg font-semibold mb-4">Students</h2>
+            {% if group.students.all %}
+                <ul class="divide-y divide-gray-200">
+                    {% for student in group.students.all %}
+                        <li class="py-2">
+                            <a href="{% url 'students:detail' student.id %}" class="text-blue-600 hover:underline">
+                                {{ student.first_name }} {{ student.last_name }}
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="text-gray-500">No students enrolled in this group.</p>
+            {% endif %}
+        </div>
     </div>
 </div>
 {% endblock %}

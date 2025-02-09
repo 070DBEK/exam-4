@@ -24,10 +24,11 @@ class Group(models.Model):
     academic_year = models.CharField(max_length=20)
     max_students = models.PositiveIntegerField()
     description = models.TextField(blank=True, null=True)
-    subjects = models.ManyToManyField(Subject, blank=True)
+    subjects = models.ManyToManyField(Subject, related_name='groups')
+    students = models.ManyToManyField("students.Student", related_name="groups", blank=True)  # "students.Student" qilib yozildi
 
     def get_absolute_url(self):
-        return reverse("groups:group_detail", kwargs={"pk": self.pk})
+        return reverse("groups:detail", kwargs={"pk": self.pk})
 
     def __str__(self):
         return self.name
