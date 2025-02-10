@@ -33,6 +33,9 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'admin_interface',  # 🎨 Chiroyli admin interfeys
+    'colorfield',  # 🎨 Ranglarni sozlash uchun
+    'import_export',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
