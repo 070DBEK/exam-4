@@ -21,7 +21,7 @@ class Teacher(models.Model):
     department = models.ForeignKey(Department, on_delete=models.CASCADE)
     subjects = models.ManyToManyField(Subject, related_name="teachers")
     profile_photo = models.ImageField(upload_to='teachers/', blank=True, null=True)
-    is_active = models.BooleanField(default=True)  # ✅ Yangi maydon qo'shildi
+    is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"

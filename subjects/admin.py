@@ -4,6 +4,7 @@ from .models import Subject
 
 @admin.register(Subject)
 class SubjectAdmin(admin.ModelAdmin):
-    list_display = ['name', 'department', 'credit_hours', 'grade_level', 'prerequisites']
-    list_filter = ['department', 'grade_level']
-    search_fields = ['name', 'prerequisites']
+    list_display = ('name', 'department', 'grade_level', 'credit_hours', 'prerequisites')
+    search_fields = ('name', 'department__name')
+    list_filter = ('grade_level', 'department')
+    ordering = ('name',)
