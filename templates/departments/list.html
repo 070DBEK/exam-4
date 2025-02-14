@@ -130,7 +130,7 @@
                     </td>
                     <td class="px-6 py-4">
                         <div class="flex items-center space-x-3">
-                            <a href="{% url 'departments:detail' department.pk %}" class="text-blue-600 hover:text-blue-800">
+                            <a href="{{ department.get_detail_url }}" class="text-blue-600 hover:text-blue-800">
                                 <i class="bi bi-eye"></i>
                             </a>
                             <a href="{% url 'departments:update' department.pk %}" class="text-gray-600 hover:text-gray-800">
