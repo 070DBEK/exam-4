@@ -1,11 +1,13 @@
+from django.shortcuts import get_object_or_404
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import GroupForm
 from django.db.models import Q
 from .models import Group, Teacher
 
 
-class GroupListView(ListView):
+class GroupListView(LoginRequiredMixin, ListView):
     model = Group
     template_name = "groups/list.html"
     context_object_name = "groups"
@@ -40,25 +42,39 @@ class GroupListView(ListView):
 
 
 
-class GroupDetailView(DetailView):
+class GroupDetailView(LoginRequiredMixin, DetailView):
     model = Group
     template_name = "groups/detail.html"
     context_object_name = "group"
 
+    def get_object(self, queryset=None):
+        return get_object_or_404(
+            Group,
+            created_at__year=self.kwargs['year'],
+            created_at__month=self.kwargs['month'],
+            created_at__day=self.kwargs['day'],
+            slug=self.kwargs['slug']
+        )
 
-class GroupCreateView(CreateView):
+
+class GroupCreateView(LoginRequiredMixin, CreateView):
+    model = Group
+    form_class = GroupForm
+    template_name = "groups/form.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['directors'] = Group.objects.all()
+        return context
+
+
+class GroupUpdateView(LoginRequiredMixin, UpdateView):
     model = Group
     form_class = GroupForm
     template_name = "groups/form.html"
 
 
-class GroupUpdateView(UpdateView):
-    model = Group
-    form_class = GroupForm
-    template_name = "groups/form.html"
-
-
-class GroupDeleteView(DeleteView):
+class GroupDeleteView(LoginRequiredMixin, DeleteView):
     model = Group
     template_name = "groups/group_confirm_delete.html"
     success_url = reverse_lazy("groups:list")

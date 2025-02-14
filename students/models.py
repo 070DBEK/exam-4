@@ -1,8 +1,12 @@
 from django.db import models
 from groups.models import Group
+from django.utils.text import slugify
+from django.urls import reverse
+import random
+from departments.base_model import BaseModel
 
 
-class Student(models.Model):
+class Student(BaseModel):
     GENDER_CHOICES = [
         ('M', 'Male'),
         ('F', 'Female'),
@@ -31,3 +35,16 @@ class Student(models.Model):
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.last_name, self.first_name) + "-" + str(random.randint(1,100))
+        super().save(*args, **kwargs)
+
+    def get_detail_url(self):
+        return reverse('students:detail', args=[
+            self.created_at.year,
+            self.created_at.month,
+            self.created_at.day,
+            self.slug
+        ])

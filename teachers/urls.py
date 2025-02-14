@@ -5,7 +5,7 @@ app_name = 'teachers'
 
 urlpatterns = [
     path('', TeacherListView.as_view(), name='list'),
-    path('<int:pk>/', TeacherDetailView.as_view(), name='detail'),
+    path('<int:year>/<int:month>/<int:day>/<slug:slug>/detail/', TeacherDetailView.as_view(), name='detail'),
     path('create/', TeacherCreateView.as_view(), name='create'),
     path('<int:pk>/update/', TeacherUpdateView.as_view(), name='update'),
     path('<int:pk>/delete/', TeacherDeleteView.as_view(), name='delete'),

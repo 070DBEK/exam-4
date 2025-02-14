@@ -1,8 +1,14 @@
+from email.errors import NonASCIILocalPartDefect
+
 from django.db import models
 from departments.models import Department
+from django.utils.text import slugify
+from django.urls import reverse
+import random
+from departments.base_model import BaseModel
 
 
-class Subject(models.Model):
+class Subject(BaseModel):
     SUBJECT_CHOICES = [
         ('math', 'Mathematics'),
         ('phy', 'Physics'),
@@ -41,3 +47,16 @@ class Subject(models.Model):
 
     def __str__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name) + "-" + str(random.randint(1,100))
+        super().save(*args, **kwargs)
+
+    def get_detail_url(self):
+        return reverse('subjects:detail', args=[
+            self.created_at.year,
+            self.created_at.month,
+            self.created_at.day,
+            self.slug
+        ])

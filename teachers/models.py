@@ -1,9 +1,13 @@
 from django.db import models
 from departments.models import Department
 from subjects.models import Subject
+from departments.base_model import BaseModel
+from django.utils.text import slugify
+from django.urls import reverse
+import random
 
 
-class Teacher(models.Model):
+class Teacher(BaseModel):
     EMPLOYMENT_TYPES = [
         ('full_time', 'Full Time'),
         ('part_time', 'Part Time'),
@@ -25,3 +29,16 @@ class Teacher(models.Model):
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.last_name, self.first_name) + "-" + str(random.randint(1,100))
+        super().save(*args, **kwargs)
+
+    def get_detail_url(self):
+        return reverse('teachers:detail', args=[
+            self.created_at.year,
+            self.created_at.month,
+            self.created_at.day,
+            self.slug
+        ])

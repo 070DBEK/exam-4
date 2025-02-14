@@ -5,10 +5,11 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, DeleteView
 from django.shortcuts import render
 from django.db.models import Q
+from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Subject
 
 
-class SubjectListView(ListView):
+class SubjectListView(LoginRequiredMixin, ListView):
     model = Subject
     template_name = "subjects/list.html"
     context_object_name = "subjects"
@@ -20,8 +21,7 @@ class SubjectListView(ListView):
         if search_query:
             queryset = queryset.filter(
                 Q(name__icontains=search_query) |
-                Q(description__icontains=search_query) |
-                Q(grade_level__icontains=search_query)  # Faqat mavjud maydonlar!
+                Q(description__icontains=search_query)
             )
         return queryset
 
@@ -31,14 +31,8 @@ class SubjectListView(ListView):
         context["search_query"] = self.request.GET.get("q", "")
         return context
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["title"] = "Subjects"
-        context["search_query"] = self.request.GET.get("q", "")
-        return context
 
-
-class SubjectDetailView(DetailView):
+class SubjectDetailView(LoginRequiredMixin, DetailView):
     model = Subject
     template_name = "subjects/detail.html"
     context_object_name = "subject"
@@ -55,14 +49,23 @@ class SubjectDetailView(DetailView):
         context['average_grade'] = round(sum(grades) / len(grades), 2) if grades else "N/A"
         return context
 
+    def get_object(self, queryset=None):
+        return get_object_or_404(
+            Subject,
+            created_at__year=self.kwargs['year'],
+            created_at__month=self.kwargs['month'],
+            created_at__day=self.kwargs['day'],
+            slug=self.kwargs['slug']
+        )
 
-class SubjectDeleteView(DeleteView):
+
+class SubjectDeleteView(LoginRequiredMixin, DeleteView):
     model = Subject
     template_name = "subjects/subject_confirm_delete.html"
     success_url = reverse_lazy("subjects:list")
 
 
-class SubjectCreateView(View):
+class SubjectCreateView(LoginRequiredMixin, View):
     def get(self, request):
         form = SubjectForm()
         return render(request, 'subjects/form.html', {'form': form})
@@ -71,11 +74,11 @@ class SubjectCreateView(View):
         form = SubjectForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('subjects:list')  # Subjects ro‘yxatiga qaytarish
+            return redirect('subjects:list')
         return render(request, 'subjects/form.html', {'form': form})
 
 
-class SubjectUpdateView(View):
+class SubjectUpdateView(LoginRequiredMixin, View):
     def get(self, request, pk):
         subject = get_object_or_404(Subject, pk=pk)
         form = SubjectForm(instance=subject)

@@ -11,7 +11,7 @@ app_name = 'students'
 
 urlpatterns = [
     path("", StudentListView.as_view(), name="list"),
-    path("<int:pk>/", StudentDetailView.as_view(), name="detail"),
+    path("<int:year>/<int:month>/<int:day>/<slug:slug>/detail/", StudentDetailView.as_view(), name="detail"),
     path("add/", StudentCreateView.as_view(), name="create"),
     path("<int:pk>/edit/", StudentUpdateView.as_view(), name="update"),
     path("<int:pk>/delete/", StudentDeleteView.as_view(), name="delete"),

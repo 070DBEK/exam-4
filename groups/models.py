@@ -1,10 +1,14 @@
 from django.db import models
 from django.urls import reverse
+from departments.base_model import BaseModel
 from teachers.models import Teacher
 from subjects.models import Subject
+from django.utils.text import slugify
+from django.urls import reverse
+import random
 
 
-class Group(models.Model):
+class Group(BaseModel):
     GRADE_LEVEL_CHOICES = [
         (9, "Grade 9"),
         (10, "Grade 10"),
@@ -32,3 +36,16 @@ class Group(models.Model):
 
     def __str__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name) + "-" + str(random.randint(1,100))
+        super().save(*args, **kwargs)
+
+    def get_detail_url(self):
+        return reverse('groups:detail', args=[
+            self.created_at.year,
+            self.created_at.month,
+            self.created_at.day,
+            self.slug
+        ])

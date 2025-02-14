@@ -2,12 +2,13 @@ from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import Department
+from django.contrib.auth.mixins import LoginRequiredMixin
 from directors.models import Director
 from .forms import DepartmentForm
 from django.db.models import Q
 
 
-class DepartmentListView(ListView):
+class DepartmentListView(LoginRequiredMixin, ListView):
     model = Department
     template_name = 'departments/list.html'
     context_object_name = 'departments'
@@ -30,7 +31,7 @@ class DepartmentListView(ListView):
         return context
 
 
-class DepartmentDetailView(DetailView):
+class DepartmentDetailView(LoginRequiredMixin, DetailView):
     model = Department
     template_name = 'departments/detail.html'
     context_object_name = 'department'
@@ -45,7 +46,7 @@ class DepartmentDetailView(DetailView):
         )
 
 
-class DepartmentCreateView(CreateView):
+class DepartmentCreateView(LoginRequiredMixin, CreateView):
     model = Department
     form_class = DepartmentForm
     template_name = 'departments/form.html'
@@ -53,18 +54,18 @@ class DepartmentCreateView(CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['directors'] = Director.objects.all()  # Direktorlardan tanlash uchun qo‘shildi
+        context['directors'] = Director.objects.all()
         return context
 
 
-class DepartmentUpdateView(UpdateView):
+class DepartmentUpdateView(LoginRequiredMixin, UpdateView):
     model = Department
     form_class = DepartmentForm
     template_name = 'departments/form.html'
     success_url = reverse_lazy('departments:list')
 
 
-class DepartmentDeleteView(DeleteView):
+class DepartmentDeleteView(LoginRequiredMixin, DeleteView):
     model = Department
     template_name = 'departments/confirm_delete.html'
     success_url = reverse_lazy('departments:list')

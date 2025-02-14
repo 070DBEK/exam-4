@@ -1,13 +1,15 @@
+from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import Teacher
 from subjects.models import Subject
 from departments.models import Department
 from .forms import TeacherForm
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 
 
-class TeacherListView(ListView):
+class TeacherListView(LoginRequiredMixin, ListView):
     model = Teacher
     template_name = 'teachers/list.html'
     context_object_name = 'teachers'
@@ -20,7 +22,6 @@ class TeacherListView(ListView):
         status = self.request.GET.get('status')
         search_query = self.request.GET.get('q')
 
-        # Qidiruv so'rovi ishlashi uchun filter qo'shish
         if search_query:
             queryset = queryset.filter(
                 Q(first_name__icontains=search_query) | Q(last_name__icontains=search_query)
@@ -49,27 +50,36 @@ class TeacherListView(ListView):
         return context
 
 
-class TeacherDetailView(DetailView):
+class TeacherDetailView(LoginRequiredMixin, DetailView):
     model = Teacher
     template_name = 'teachers/detail.html'
     context_object_name = 'teacher'
 
+    def get_object(self, queryset=None):
+        return get_object_or_404(
+            Teacher,
+            created_at__year=self.kwargs['year'],
+            created_at__month=self.kwargs['month'],
+            created_at__day=self.kwargs['day'],
+            slug=self.kwargs['slug']
+        )
 
-class TeacherCreateView(CreateView):
+
+class TeacherCreateView(LoginRequiredMixin, CreateView):
     model = Teacher
     form_class = TeacherForm
     template_name = 'teachers/form.html'
     success_url = reverse_lazy('teachers:list')
 
 
-class TeacherUpdateView(UpdateView):
+class TeacherUpdateView(LoginRequiredMixin, UpdateView):
     model = Teacher
     form_class = TeacherForm
     template_name = 'teachers/form.html'
     success_url = reverse_lazy('teachers:list')
 
 
-class TeacherDeleteView(DeleteView):
+class TeacherDeleteView(LoginRequiredMixin, DeleteView):
     model = Teacher
     template_name = 'teachers/teacher_confirm_delete.html'
     success_url = reverse_lazy('teachers:list')
