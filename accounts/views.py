@@ -1,16 +1,15 @@
 from django.contrib.auth import login, authenticate, logout
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.views import LogoutView
 from django.contrib.auth import update_session_auth_hash
-from django.shortcuts import redirect
+from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, FormView, UpdateView, TemplateView, View
 from .forms import CustomUserCreationForm, CustomAuthenticationForm, UserProfileForm
-from django.shortcuts import render
 from students.models import Student
 from teachers.models import Teacher
 from groups.models import Group
 from subjects.models import Subject
+from django.http import JsonResponse
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 class DashboardView(LoginRequiredMixin, TemplateView):
@@ -24,6 +23,40 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         context['total_groups'] = Group.objects.count()
         context['total_subjects'] = Subject.objects.count()
         return context
+
+# API JSON response uchun funksiya
+def enrollment_data(request):
+    """ Talabalar soni bo‘yicha oylar kesimidagi statistikani jo‘natadi """
+    data = {
+        "labels": ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+        "datasets": [
+            {
+                "label": "2024 Enrollments",
+                "data": list(Student.objects.values_list('id', flat=True)),  # Bu joyni real ma'lumot bilan o'zgartiring
+                "borderColor": "#2563eb",
+                "backgroundColor": "rgba(37, 99, 235, 0.1)",
+                "fill": True,
+                "tension": 0.4
+            }
+        ]
+    }
+    return JsonResponse(data)
+
+
+def subject_distribution(request):
+    subjects = Subject.objects.annotate(student_count=Count('student'))
+
+    data = {
+        "labels": [subject.name for subject in subjects],
+        "datasets": [{
+            "data": [subject.student_count for subject in subjects],
+            "backgroundColor": [
+                '#2563eb', '#9333ea', '#06b6d4', '#10b981', '#f59e0b', '#ef4444'
+            ]
+        }]
+    }
+
+    return JsonResponse(data)
 
 
 class SignUpView(CreateView):
